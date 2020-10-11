@@ -13,14 +13,16 @@ module Authors
     end
 
     # GET /posts/1/edit
-    def edit; end
+    def edit
+      @element = @post.elements.build
+    end
 
     # POST /posts
     def create
       @post = current_author.posts.build(post_params)
 
       if @post.save
-        redirect_to @post, notice: 'Post was successfully created.'
+        redirect_to edit_post_path(@post)
       else
         render :new
       end
@@ -29,7 +31,7 @@ module Authors
     # PATCH/PUT /posts/1
     def update
       if @post.update(post_params)
-        redirect_to @post, notice: 'Post was successfully updated.'
+        redirect_to edit_post_path(@post)
       else
         render :edit
       end
@@ -50,7 +52,7 @@ module Authors
 
     # Only allow a trusted parameter "white list" through.
     def post_params
-      params.require(:post).permit(:title, :description)
+      params.require(:post).permit(:title, :description, :header_image)
     end
   end
 end
